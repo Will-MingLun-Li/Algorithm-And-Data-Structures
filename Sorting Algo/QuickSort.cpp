@@ -1,6 +1,6 @@
 // Quick Sort
-// Avg time complexity - O(nlogn)
-// Space complexity - O(logn)
+// Avg time complexity: O(nlogn)
+// Space complexity: O(logn)
 
 #include <vector>
 #include <iostream>
