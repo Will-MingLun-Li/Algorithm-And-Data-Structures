@@ -1,6 +1,7 @@
 // Binary Search Tree
-// Insertion: 
-// Deletion: 
+// Insertion: O(logn)
+// Deletion: O(logn)
+// Search: O(logn)
 // Destroy BST: O(n)
 // Traversals: O(n)
 
@@ -18,9 +19,11 @@ class bst {
 		bst();
 		~bst();
 
-		void insert(int key);
-		void remove(int key);
-		void destroyBST();
+		void insert(int val);
+		void remove(int val);
+		void destroy();
+		node *search(int val);
+
 		void preorder(node *node);
 		void inorder(node *node);
 		void postorder(node *node);
@@ -28,7 +31,10 @@ class bst {
 	private:
 		node *root;
 
-		void destroyBST(node *node);
+		void insertNode(int val, node *node);
+		void removeNode(int val, node *node);
+		void destroyBST(node *node);	
+		node *searchNode(int val, node *node);
 };
 
 bst::bst() {
@@ -36,10 +42,18 @@ bst::bst() {
 }
 
 bst::~bst() {
-	destroyBST();
+	destroy();
 }
 
-void bst::destroyBST() {
+void bst::insert(int val) {
+
+}
+
+void bst::insertNode (int val, node *node) {
+
+}
+
+void bst::destroy() {
 	destroyBST(root);
 }
 
@@ -50,6 +64,14 @@ void bst::destroyBST(node *node) {
 
 		delete node;
 	}
+}
+
+node *bst::search(int val) {
+	return searchNode(val, root);
+}
+
+node *bst::searchNode(int val, node *node){
+
 }
 
 void bst::preorder(node *node) {
