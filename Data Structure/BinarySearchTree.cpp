@@ -46,11 +46,38 @@ bst::~bst() {
 }
 
 void bst::insert(int val) {
+	if (root != NULL) {
+		insertNode(val, root);
+	}
+	else {
+		root = new node;
+		root->left = NULL;
+		root->right = NULL;
+	}
 
 }
 
 void bst::insertNode (int val, node *node) {
-
+	if (val < node->data) {
+		if (node->left != NULL) {
+			insertNode(val, node->left);
+		}
+		else {
+			node->left = new node;
+			node->left->left = NULL;
+			node->left->right = NULL;
+		}
+	}
+	else if (val >= node->data) {
+		if (node->right != NULL){
+			insertNode(val, node->right);
+		}
+		else {
+			node->right = new node;
+			node->right->left = NULL;
+			node->right->right = NULL;
+		}
+	}
 }
 
 void bst::destroy() {
