@@ -45,6 +45,19 @@ bst::~bst() {
 	destroy();
 }
 
+void bst::destroy() {
+	destroyBST(root);
+}
+
+void bst::destroyBST(node *node) {
+	if (node != NULL) {
+		destroyBST(node->left);
+		destroyBST(node->right);
+
+		delete node;
+	}
+}
+
 void bst::insert(int val) {
 	if (root != NULL) {
 		insertNode(val, root);
@@ -80,17 +93,12 @@ void bst::insertNode (int val, node *node) {
 	}
 }
 
-void bst::destroy() {
-	destroyBST(root);
+void bst::remove(int val) {
+
 }
 
-void bst::destroyBST(node *node) {
-	if (node != NULL) {
-		destroyBST(node->left);
-		destroyBST(node->right);
+void bst::removeNode(int val, node *node) {
 
-		delete node;
-	}
 }
 
 node *bst::search(int val) {
@@ -98,7 +106,18 @@ node *bst::search(int val) {
 }
 
 node *bst::searchNode(int val, node *node){
+	if (node != NULL) {
+		if (val == node->data)
+			return node;
 
+		if (val < node->data)
+			return searchNode(val, node->left);
+		else
+			return searchNode(val, node->right);
+	}
+	else {
+		return NULL;
+	}
 }
 
 void bst::preorder(node *node) {
