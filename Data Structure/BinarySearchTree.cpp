@@ -59,46 +59,65 @@ void bst::destroyBST(node *node) {
 }
 
 void bst::insert(int val) {
-	if (root != NULL) {
-		insertNode(val, root);
-	}
-	else {
-		root = new node;
-		root->left = NULL;
-		root->right = NULL;
-	}
-
+	insertNode(val, root);
 }
 
 void bst::insertNode (int val, node *node) {
-	if (val < node->data) {
-		if (node->left != NULL) {
-			insertNode(val, node->left);
-		}
-		else {
-			node->left = new node;
-			node->left->left = NULL;
-			node->left->right = NULL;
-		}
+	if (node == NULL) {
+		node = new node;
+		node->data = val;
+		node->left = NULL;
+		node->right = NULL;
+	}
+	else if (val < node->data) {
+		node->left = insertNode(val, node->left);
 	}
 	else if (val >= node->data) {
-		if (node->right != NULL){
-			insertNode(val, node->right);
-		}
-		else {
-			node->right = new node;
-			node->right->left = NULL;
-			node->right->right = NULL;
-		}
+		node->right = insertNode(val, node->right);
 	}
 }
 
 void bst::remove(int val) {
-
+	removeNode(val, root);
 }
 
 void bst::removeNode(int val, node *node) {
+	if (node == NULL) {
+		return node;
+	}
+	else if (val < node->data) {
+		node->left = removeNode(val, node->left);
+	}
+	else if (val > node->data) {
+		node->right = removeNode(val, node->right);
+	}
+	else {
+		if (node->left == NULL && node->right == NULL) {
+			delete node;
+			node = NULL;
+		}
+		else if (node->left == NULL) {
+			node *temp = node;
+			node = node->right;
+			delete temp;
+		}
+		else if (node->right == NULL) {
+			node *temp = node;
+			node = node->left;
+			delete temp;
+		}
+		else {
+			node *check = node->right;
+			while (check->left != NULL) {
+				check = check->left;
+			}
 
+			node->data = check->data;
+			node->right = removeNode(check->data, node->right);
+		}
+	}
+
+	return node;
 }
 
 node *bst::search(int val) {
