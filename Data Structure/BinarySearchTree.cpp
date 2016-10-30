@@ -1,7 +1,7 @@
 // Binary Search Tree
 // Insertion: O(logn)
-// Deletion: O(logn)
 // Search: O(logn)
+// Removal: O(logn)
 // Destroy BST: O(n)
 // Traversals: O(n)
 
@@ -15,26 +15,30 @@ struct node {
 };
 
 class bst {
-	public:
-		bst();
-		~bst();
+public:
+	bst();
+	~bst();
 
-		void insert(int val);
-		void remove(int val);
-		void destroy();
-		node *search(int val);
+	void insert(int val);
+	void destroy();
+	node *remove(int val);
+	node *search(int val);
 
-		void preorder(node *node);
-		void inorder(node *node);
-		void postorder(node *node);
+	void print_preorder();
+	void print_inorder();
+	void print_postorder();
 
-	private:
-		node *root;
+private:
+	node *root;
 
-		void insertNode(int val, node *node);
-		void removeNode(int val, node *node);
-		void destroyBST(node *node);	
-		node *searchNode(int val, node *node);
+	void insertNode(int val, node *leaf);
+	void destroyBST(node *leaf);
+	node *removeNode(int val, node *leaf);
+	node *searchNode(int val, node *leaf);
+
+	void preorder(node *leaf);
+	void inorder(node *leaf);
+	void postorder(node *leaf);
 };
 
 bst::bst() {
@@ -49,124 +53,151 @@ void bst::destroy() {
 	destroyBST(root);
 }
 
-void bst::destroyBST(node *node) {
-	if (node != NULL) {
-		destroyBST(node->left);
-		destroyBST(node->right);
+void bst::destroyBST(node *leaf) {
+	if (leaf != NULL) {
+		destroyBST(leaf->left);
+		destroyBST(leaf->right);
 
-		delete node;
+		delete leaf;
 	}
 }
 
-void bst::insert(int val) {
-	insertNode(val, root);
-}
-
-void bst::insertNode (int val, node *node) {
-	if (node == NULL) {
-		node = new node;
-		node->data = val;
-		node->left = NULL;
-		node->right = NULL;
-	}
-	else if (val < node->data) {
-		node->left = insertNode(val, node->left);
-	}
-	else if (val >= node->data) {
-		node->right = insertNode(val, node->right);
+void bst::insert(int val)
+{
+	if (root != NULL)
+		insertNode(val, root);
+	else
+	{
+		root = new node;
+		root->data = val;
+		root->left = NULL;
+		root->right = NULL;
 	}
 }
 
-void bst::remove(int val) {
-	removeNode(val, root);
+void bst::insertNode(int val, node *leaf) {
+	if (val < leaf->data) {
+		if (leaf->left != NULL) {
+			insertNode(val, leaf->left);
+		}
+		else {
+			leaf->left = new node;
+			leaf->left->data = val;
+			leaf->left->left = NULL;
+			leaf->left->right = NULL;
+		}
+	}
+	else if (val >= leaf->data) {
+		if (leaf->right != NULL) {
+			insertNode(val, leaf->right);
+		}
+		else {
+			leaf->right = new node;
+			leaf->right->data = val;
+			leaf->right->left = NULL;
+			leaf->right->right = NULL;
+		}
+	}
 }
 
-void bst::removeNode(int val, node *node) {
-	if (node == NULL) {
-		return node;
+node *bst::remove(int val) {
+	return removeNode(val, root);
+}
+
+node *bst::removeNode(int val, node *leaf) {
+	if (leaf == NULL) {
+		return leaf;
 	}
-	else if (val < node->data) {
-		node->left = removeNode(val, node->left);
+	else if (val < leaf->data) {
+		leaf->left = removeNode(val, leaf->left);
 	}
-	else if (val > node->data) {
-		node->right = removeNode(val, node->right);
+	else if (val > leaf->data) {
+		leaf->right = removeNode(val, leaf->right);
 	}
 	else {
-		if (node->left == NULL && node->right == NULL) {
-			delete node;
-			node = NULL;
+		if (leaf->left == NULL && leaf->right == NULL) {
+			delete leaf;
+			leaf = NULL;
 		}
-		else if (node->left == NULL) {
-			node *temp = node;
-			node = node->right;
+		else if (leaf->left == NULL) {
+			node *temp = leaf;
+			leaf = leaf->right;
 			delete temp;
 		}
-		else if (node->right == NULL) {
-			node *temp = node;
-			node = node->left;
+		else if (leaf->right == NULL) {
+			node *temp = leaf;
+			leaf = leaf->left;
 			delete temp;
 		}
 		else {
-			node *check = node->right;
+			node *check = leaf->right;
 			while (check->left != NULL) {
 				check = check->left;
 			}
 
-			node->data = check->data;
-			node->right = removeNode(check->data, node->right);
+			leaf->data = check->data;
+			leaf->right = removeNode(check->data, leaf->right);
 		}
 	}
 
-	return node;
+	return leaf;
 }
 
 node *bst::search(int val) {
 	return searchNode(val, root);
 }
 
-node *bst::searchNode(int val, node *node){
-	if (node != NULL) {
-		if (val == node->data)
-			return node;
+node *bst::searchNode(int val, node *leaf) {
+	if (leaf != NULL) {
+		if (val == leaf->data) 
+			return leaf;
 
-		if (val < node->data)
-			return searchNode(val, node->left);
+		if (val < leaf->data)
+			return searchNode(val, leaf->left);
 		else
-			return searchNode(val, node->right);
+			return searchNode(val, leaf->right);
 	}
 	else {
+		cout << 2 << endl;
 		return NULL;
 	}
 }
 
-void bst::preorder(node *node) {
-	if (node == NULL)
-		return;
-
-	cout << node->data << " ";
-	preorder(node->left);
-	preorder(node->right);
+void bst::print_preorder() {
+	preorder(root);
 }
 
-void bst::inorder(node *node) {
-	if (node == NULL)
-		return;
-
-	inorder(node->left);
-	cout << node->data << " ";
-	inorder(node->right);
+void bst::print_inorder() {
+	inorder(root);
 }
 
-void bst::postorder(node *node) {
-	if (node == NULL)
-		return;
-
-	postorder(node->left);
-	postorder(node->right);
-	cout << node->data << " ";
+void bst::print_postorder() {
+	postorder(root);
 }
 
-int main() {
+void bst::preorder(node *leaf) {
+	if (leaf == NULL)
+		return;
 
-	return 0;
+	cout << leaf->data << " ";
+	preorder(leaf->left);
+	preorder(leaf->right);
+}
+
+void bst::inorder(node *leaf) {
+	if (leaf == NULL)
+		return;
+
+	inorder(leaf->left);
+	cout << leaf->data << " ";
+	inorder(leaf->right);
+}
+
+void bst::postorder(node *leaf) {
+	if (leaf == NULL)
+		return;
+
+	postorder(leaf->left);
+	postorder(leaf->right);
+	cout << leaf->data << " ";
 }
