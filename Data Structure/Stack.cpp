@@ -1,7 +1,6 @@
 // Stack
 // Push: O(1)
 // Pop: O(1)
-
 #include <iostream>
 using namespace std;
 
@@ -86,7 +85,6 @@ void stack<T>::print() {
 	delete temp;
 }
 
-
 int main() {
 	stack<int> s;
 	s.push(3);
@@ -101,6 +99,4 @@ int main() {
 	s.print();
 	s.pop();
 	s.print();
-
-	system("pause");
 }
